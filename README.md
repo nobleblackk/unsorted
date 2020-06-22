@@ -47,6 +47,11 @@ e.g. console.log(sort.quickSort([3, 0, 2, 5, -1, 4, 1],0,6));
 Sort all the elements using HeapSort.
 e.g. console.log(sort.heapSort([3, 0, 2, 5, -1, 4, 1]));
 
+## CountingSort
+
+Sort all the elements using CountingSort.
+e.g. console.log(sort.countingSort([3, 0, 2, 5, -1, 4, 1]));
+
 # 2.Array-Operations =>
 
 const {array} = require("unsorted");
@@ -113,6 +118,16 @@ e.g. console.log(string.getFrequency(string));
 # 4.Math-Operations =>
 
 const {math} = require("unsorted");
+
+## Newton's Square Root Method
+
+Return square root using Newton's Square Root Method.
+e.g. console.log(math.newtonSquareRoot(num));
+
+## karatsuba Multiplication (O(n^1.59))
+
+Return multiplication of two numbers using karatsuba Multiplication Method.
+e.g. console.log(math.karatsubaMultiplication(x,y));
 
 ## Permutations
 

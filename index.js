@@ -145,6 +145,24 @@ const unsorted = {
       input[index_A] = input[index_B];
       input[index_B] = temp;
     },
+    countingSort(arr) {
+      let Max = Math.max(...arr);
+      let count = Array(Max + 1).fill(0);
+      for (let i = 0; i < arr.length; i += 1) {
+        count[arr[i]] += 1;
+      }
+      for (let i = 1; i < Max + 1; i += 1) {
+        count[i] += count[i - 1];
+      }
+      let res = Array(arr.length).fill(0);
+      let i = arr.length - 1;
+      while (i >= 0) {
+        res[count[arr[i]] - 1] = arr[i];
+        count[arr[i]] -= 1;
+        i -= 1;
+      }
+      return res;
+    },
   },
   array: {
     sum(arr) {
@@ -292,6 +310,33 @@ const unsorted = {
       }
       return temp;
     },
+    newtonSquareRoot(number, iterations = 500) {
+      let a = number;
+      for (let i = 0; i < iterations; i += 1) {
+        number = (number + a / number) / 2;
+      }
+      return number;
+    },
+    // Karatsuba algorithm for fast multiplication using Divide and Conquer algorithm
+    // Using Divide and Conquer, we can multiply two integers in less time complexity. We divide the given numbers in two halves. Let the given numbers be X and Y.
+    // X =  Xl*2n/2 + Xr    [Xl and Xr contain leftmost and rightmost n/2 bits of X]
+    // Y =  Yl * 2n / 2 + Yr[Yl and Yr contain leftmost and rightmost n/ 2 bits of Y]
+    // XY = (Xl*2n/2 + Xr)(Yl*2n/2 + Yr) = 2n XlYl + 2n / 2(XlYr + XrYl) + XrYr
+    // the recurrence becomes T(n) = 3T(n/2) + O(n) and solution of this recurrence is O(n1.59).
+    karatsubaMultiplication(x, y) {
+      if (x.toFixed().length === 1 || y.toFixed().length === 1) {
+        return x * y;
+      }
+      let n = parseInt(Math.max(x.toFixed().length, y.toFixed().length) / 2);
+      let a = parseInt(x / Math.pow(10, n));
+      let b = parseInt(x % Math.pow(10, n));
+      let c = parseInt(y / Math.pow(10, n));
+      let d = parseInt(y % Math.pow(10, n));
+      let ac = this.karatsubaMultiplication(a, c);
+      let bd = this.karatsubaMultiplication(b, d);
+      let ad_bc = this.karatsubaMultiplication(a + b, c + d) - ac - bd;
+      return ac * Math.pow(10, n * 2) + ad_bc * Math.pow(10, n) + bd;
+    },
   },
 };
 // Driver Code
@@ -306,6 +351,10 @@ const unsorted = {
 // console.log(unsorted.math.powerset("abc"));
 // console.log(unsorted.math.catalannumber(5));
 
+// console.log(unsorted.sort.countingSort([1, 5, 3, 2, 11, 7, 4]));
+
+// console.log(unsorted.math.newtonSquareRoot(5));
+// console.log(unsorted.math.karatsubaMultiplication(12, 10000004355353525346));
 module.exports = unsorted;
 
 // Contributed by NobleBlack
