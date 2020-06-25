@@ -270,8 +270,6 @@ e.g. console.log(input.readLine());
 Input Numeric Array.
 e.g. console.log(input.readNumberArray());
 
-# Project Structure
-
 ## Used technologies :
 
 - **ES6/ESNext** - Write _ES6_ code and _Babel_ will transpile it to ES5 for backwards compatibility
