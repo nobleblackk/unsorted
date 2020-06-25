@@ -1,14 +1,28 @@
 {
   "name": "unsorted",
-  "version": "1.0.6",
+  "version": "1.0.8",
   "description": "Here to Help you in Code Less, Think More !  ",
   "main": "index.js",
   "keywords": [
+    "competitive-programming",
+    "competitive programming",
+    "competitive programming js",
+    "competitive programming js npm",
+    "Coding Contest",
+    "competitive programming node js npm package",
+    "boilerplate",
+    "npm",
+    "module",
+    "node",
+    "javascript",
     "npm",
     "npm-coding",
     "competitive-programming",
     "NobleBlack"
   ],
   "author": "Abhishek Sharma",
-  "license": "ISC"
+  "license": "MIT",
+  "dependencies": {
+    "wait-console-input": "^0.1.7"
+  }
 }

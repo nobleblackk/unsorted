@@ -1,3 +1,4 @@
+const inputUtil = require("wait-console-input");
 const unsorted = {
   sort: {
     // Worst Time-Complexity => O(n^2)
@@ -220,6 +221,18 @@ const unsorted = {
     },
   },
   string: {
+    palindrome(string) {
+      // Base case
+      if (string.length < 2) return true;
+
+      // Check outermost keys
+      if (string[0] !== string[string.length - 1]) {
+        return false;
+      }
+
+      return this.palindrome(string.slice(1, string.length - 1));
+    },
+
     // Linear Complexity
     isAnagrams(stringA, stringB) {
       /*First, we remove any non-alphabet character using regex and convert
@@ -262,6 +275,91 @@ const unsorted = {
     },
   },
   math: {
+    fibonacci(nth) {
+      const sequence = [];
+
+      if (nth >= 1) sequence.push(1);
+      if (nth >= 2) sequence.push(1);
+
+      for (let i = 2; i < nth; i++) {
+        sequence.push(sequence[i - 1] + sequence[i - 2]);
+      }
+
+      return sequence;
+    },
+
+    sieveUtils(n) {
+      /*
+       * Calculates prime numbers till a number n
+       * :param n: Number upto which to calculate primes
+       * :return: A boolean list contaning only primes
+       */
+      const primes = new Array(n + 1);
+      primes.fill(true); // set all as true initially
+      primes[0] = primes[1] = false; // Handling case for 0 and 1
+      const sqrtn = Math.ceil(Math.sqrt(n));
+      for (let i = 2; i <= sqrtn; i++) {
+        if (primes[i]) {
+          for (let j = 2 * i; j <= n; j += i) {
+            primes[j] = false;
+          }
+        }
+      }
+      return primes;
+    },
+
+    sieve(n) {
+      const primes = this.sieveUtils(n);
+      let res = [];
+      for (let i = 2; i <= n; i++) {
+        if (primes[i]) {
+          res.push(i);
+        }
+      }
+      return res;
+    },
+    lcm(num1, num2) {
+      var maxNum;
+      var l;
+      // Check to see whether num1 or num2 is larger.
+      if (num1 > num2) {
+        maxNum = num1;
+      } else {
+        maxNum = num2;
+      }
+      l = maxNum;
+
+      while (true) {
+        if (l % num1 === 0 && l % num2 === 0) {
+          break;
+        }
+        l += maxNum;
+      }
+      return l;
+    },
+    hcf(x, y) {
+      // If the input numbers are less than 1 return an error message.
+      if (x < 1 || y < 1) {
+        return "Please enter values greater than zero.";
+      }
+
+      // If the input numbers are not integers return an error message.
+      if (x !== Math.round(x) || y !== Math.round(y)) {
+        return "Please enter whole numbers.";
+      }
+
+      // Now apply Euclid's algorithm to the two numbers.
+      while (Math.max(x, y) % Math.min(x, y) !== 0) {
+        if (x > y) {
+          x %= y;
+        } else {
+          y %= x;
+        }
+      }
+
+      // When the while loop finishes the minimum of x and y is the HCF.
+      return Math.min(x, y);
+    },
     permutation(string) {
       let permutations = [];
       let arr = string.split("");
@@ -338,8 +436,208 @@ const unsorted = {
       return ac * Math.pow(10, n * 2) + ad_bc * Math.pow(10, n) + bd;
     },
   },
+  input: {
+    // Reading Single Character
+    readChar() {
+      return inputUtil.readChar();
+    },
+    // Reading Number
+
+    readNumber() {
+      return inputUtil.readFloat();
+    },
+    // Reading Line
+
+    readLine() {
+      return inputUtil.readLine();
+    },
+
+    // Reading Numeric Array
+
+    readNumberArray() {
+      return inputUtil.readNumberArray();
+    },
+
+    // Reading Generic Array
+    readArray() {
+      return inputUtil.readArray();
+    },
+
+    // Reading Boolean
+
+    readBoolean() {
+      return inputUtil.readBoolean();
+    },
+  },
+  search: {
+    search(ar, searchNum) {
+      var position = this.searchUtils(ar, searchNum);
+      if (position !== -1) {
+        // console.log(position + 1);
+        return position + 1;
+      } else {
+        // console.log("The element not found");
+        return -1;
+      }
+    },
+
+    // Search “theArray” for the specified “key” value
+    searchUtils(theArray, key) {
+      for (var n = 0; n < theArray.length; n++) {
+        if (theArray[n] === key) {
+          return n;
+        }
+      }
+      return -1;
+    },
+
+    /* The Jump Search algorithm allows to combine a linear search with a speed optimization.
+     * This means that instead of going 1 by 1, we will increase the step of √n and increase that
+     * step of √n which make the step getting bigger and bigger.
+     * The asymptotic analysis of Jump Search is o(√n). Like the binary search, it needs to be sorted.
+     * The advantage against binary search is that Jump Search traversed back only once.
+     */
+    jumpSearch(arr, value) {
+      const length = arr.length;
+      let step = Math.floor(Math.sqrt(length));
+      let lowerBound = 0;
+      while (arr[Math.min(step, length) - 1] < value) {
+        lowerBound = step;
+        step += step;
+        if (lowerBound >= length) {
+          return -1;
+        }
+      }
+
+      const upperBound = Math.min(step, length);
+      while (arr[lowerBound] < value) {
+        lowerBound++;
+        if (lowerBound === upperBound) {
+          return -1;
+        }
+      }
+      if (arr[lowerBound] === value) {
+        return lowerBound;
+      }
+      return -1;
+    },
+    binarySearch(arr, target) {
+      return this.binarySearchUtils(arr, 0, arr.length - 1, target);
+    },
+    binarySearchUtils(array, low, high, target) {
+      //base condition
+      // To exit the recursion, if array is empty or n = 1
+      if (low > high) {
+        return -1;
+      }
+      //calculate the midpoint of array
+      let mid = Math.floor((low + high) / 2);
+      if (target == array[mid]) {
+        // console.log(mid);
+        return mid;
+      } else if (target < array[mid]) {
+        //if the target is less the number at the midpoint of array
+        //Search the 2nd half.
+        return this.binarySearchUtils(array, low, mid - 1, target);
+      } else {
+        //if the target is larger number at the midpoint of array
+        //Search the 1st half.
+        return this.binarySearchUtils(array, mid + 1, high, target);
+      }
+    },
+  },
+  conversion: {
+    intToHex(num) {
+      switch (num) {
+        case 10:
+          return "A";
+        case 11:
+          return "B";
+        case 12:
+          return "C";
+        case 13:
+          return "D";
+        case 14:
+          return "E";
+        case 15:
+          return "F";
+      }
+      return num;
+    },
+
+    decimalToHex(num) {
+      const hexOut = [];
+      while (num > 15) {
+        hexOut.push(this.intToHex(num % 16));
+        num = Math.floor(num / 16);
+      }
+      return this.intToHex(num) + hexOut.join("");
+    },
+    decimalToBinary(num) {
+      var bin = [];
+      while (num > 0) {
+        bin.unshift(num % 2);
+        num >>= 1; // basically /= 2 without remainder if any
+      }
+      return bin.join("");
+    },
+  },
+  algo: {
+    NumberOfSubsetSum(array, sum) {
+      const dp = []; // create an dp array where dp[i] denote number of subset with sum equal to i
+      for (let i = 1; i <= sum; i++) {
+        dp[i] = 0;
+      }
+      dp[0] = 1; // since sum equal to 0 is always possible with no element in subset
+
+      for (let i = 0; i < array.length; i++) {
+        for (let j = sum; j >= array[i]; j--) {
+          if (j - array[i] >= 0) {
+            dp[j] += dp[j - array[i]];
+          }
+        }
+      }
+      return dp[sum];
+    },
+    maximumNonAdjacentSum(nums) {
+      /*
+       * Find the maximum non-adjacent sum of the integers in the nums input list
+       * :param nums: Array of Numbers
+       * :return: The maximum non-adjacent sum
+       */
+
+      if (nums.length < 0) return 0;
+
+      let maxIncluding = nums[0];
+      let maxExcluding = 0;
+
+      for (const num of nums.slice(1)) {
+        const temp = maxIncluding;
+        maxIncluding = maxExcluding + num;
+        maxExcluding = Math.max(temp, maxExcluding);
+      }
+
+      return Math.max(maxExcluding, maxIncluding);
+    },
+    kadane(array) {
+      let cummulativeSum = 0;
+      let maxSum = 0;
+      for (var i = 0; i < array.length; i++) {
+        cummulativeSum = cummulativeSum + array[i];
+        if (cummulativeSum < 0) {
+          cummulativeSum = 0;
+        } else if (maxSum < cummulativeSum) {
+          maxSum = cummulativeSum;
+        }
+      }
+      return maxSum;
+      // This function returns largest sum contigous sum in a array
+    },
+  },
 };
 // Driver Code
+// let a = unsorted.input.readArray();
+// console.log(a);
 // console.log(unsorted.sort.bubbleSort([3, 0, 2, 5, -1, 4, 1]));
 // console.log(unsorted.sort.insertionSort([3, 0, 2, 5, -1, 4, 1]));
 // console.log(unsorted.sort.selectionSort([3, 0, 2, 5, -1, 4, 1]));
@@ -355,6 +653,33 @@ const unsorted = {
 
 // console.log(unsorted.math.newtonSquareRoot(5));
 // console.log(unsorted.math.karatsubaMultiplication(12, 10000004355353525346));
+// console.log(unsorted.math.lcm(12, 6));
+// console.log(unsorted.math.sieve(55));
+
+// console.log(unsorted.string.palindrome("mom"));
+
+// console.log(unsorted.math.fibonacci(5));
+
+// console.log(unsorted.search.binarySearch([1, 2, 4, 5], 1));
+
+// console.log(
+//   unsorted.search.jumpSearch([0, 0, 4, 7, 10, 23, 34, 40, 55, 68, 77, 90], 313)
+// );
+
+// console.log(
+//   unsorted.search.search([0, 0, 4, 7, 10, 23, 34, 40, 55, 68, 77, 90], 90)
+// );
+
+// console.log(unsorted.algo.kadane([1, -11, 3, 4, -6]));
+
+// console.log(unsorted.algo.maximumNonAdjacentSum([1, -11, 3, 4, -6]));
+
+// console.log(unsorted.algo.NumberOfSubsetSum([1, 1, 2, 2, 3, 1, 1], 4));
+
+// console.log(unsorted.conversion.decimalToBinary(3));
+
+// console.log(unsorted.conversion.decimalToHex(123));
+
 module.exports = unsorted;
 
 // Contributed by NobleBlack
